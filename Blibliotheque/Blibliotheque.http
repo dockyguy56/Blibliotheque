@@ -1,0 +1,36 @@
+@rootURL = http://localhost:5254
+
+GET {{rootURL}}/weatherforecast/
+Accept: application/json
+
+###
+GET {{rootURL}}/api/books
+Accept: application/json
+
+###
+GET {{rootURL}}/api/books/9/George
+Accept: application/json
+
+###
+POST {{rootURL}}/api/books
+Content-Type: application/json
+{
+  "id": 9,
+  "title": "Interesting Book",
+  "author": "Writer",
+  "yearPublished": 1960
+}
+
+###
+PUT {{rootURL}}/api/books/9/George
+Content-Type: application/json
+{
+  "id": 9,
+  "title": "19REally4",
+  "author": "George",
+  "yearPublished": 1940
+}
+
+### 
+DELETE {{rootURL}}/api/books/9/Writer
+Accept: application/json
