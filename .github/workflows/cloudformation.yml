@@ -84,7 +84,7 @@ jobs:
 
     # copy cloudformation Template
     - name: copy cloudformation Template
-      run: cp ../../deployment.yaml ./artifact/deployment.yaml
+      run: cp ../Blibliotheque/deployment.yaml ./artifact/deployment.yaml
 
     # AWS buil and Push docker in ECR
     # - name: Login to Amazon ECR
