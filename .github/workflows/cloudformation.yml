@@ -82,7 +82,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    # copy cloudformation Template
+    # Copy cloudformation Template
     - name: copy cloudformation Template
       run: cp ../Blibliotheque/deployment.yaml ./artifact/deployment.yaml
 
@@ -101,7 +101,7 @@ jobs:
     #    docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
     # Upload Artifiact
-    #- uses: actions/upload-artifact@v4
-    #  with:
-    #   name: books
-    #    path: ./artifact
+    - uses: actions/upload-artifact@v4
+      with:
+       name: books
+       path: ./artifact
