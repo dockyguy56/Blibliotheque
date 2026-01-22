@@ -71,4 +71,4 @@ jobs:
         dotnet-version: 9.0.x
 
     - name: Publish
-      run: dotnet publish --output ./artifact/publish ./Blibliotheque/Blibliotheque/Blibliotheque.csproj
+      run: dotnet publish --output ./artifact/publish ../Blibliotheque/Blibliotheque/Blibliotheque.csproj
