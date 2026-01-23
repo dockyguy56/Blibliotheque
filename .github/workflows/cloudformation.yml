@@ -134,7 +134,7 @@ jobs:
           REPOSITORY: books-repository
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          echo "this message $env.REGISTRY/$env.REPOSITORY':'$env.IMAGE_TAG"
+          echo "this message ${{env.REGISTRY}}/${{env.REPOSITORY}}':'${{env.IMAGE_TAG}}"
           echo "this second message $REGISTRY/$REPOSITORY':'$IMAGE_TAG"
           docker build -t $REGISTRY/$REPOSITORY':'$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY':'$IMAGE_TAG
