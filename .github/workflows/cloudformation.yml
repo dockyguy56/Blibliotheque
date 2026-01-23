@@ -88,7 +88,7 @@ jobs:
 
     # Copy Docker Template
     - name: copy Docker Template
-      run: cp ../Blibliotheque/Blibliotheque/Dockerfile ./artifact/Dockerfile
+      run: cp ../Blibliotheque/Dockerfile ./artifact/Dockerfile
 
     # Upload Artifiact
     - uses: actions/upload-artifact@v4
