@@ -142,5 +142,5 @@ jobs:
           REPOSITORY: books-repository
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t ${{env.REGISTRY}}/${{env.REPOSITORY}}:${{env.IMAGE_TAG}} ../Blibliotheque/Blibliotheque
+          docker build -t ${{env.REGISTRY}}/${{env.REPOSITORY}}:${{env.IMAGE_TAG}} .
           docker push ${{env.REGISTRY}}/${{env.REPOSITORY}}:${{env.IMAGE_TAG}}
