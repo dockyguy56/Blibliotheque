@@ -105,3 +105,33 @@ jobs:
       with:
         name: books
         path: ./artifact
+
+    
+        
+  deploy-ecr:
+    runs-on: windows-latest
+    env:
+      Solution_Name: Blibliotheque.sln 
+    needs: build
+    steps:
+      # Download artifact
+      - uses: actions/download-artifact@v5
+        with:
+          name: books
+          path: artifact
+            
+      # AWS cred
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # AWS deploy cloud formation
+      - name: Deploy to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: booksStacks
+          template: artifact/deployment.yaml
+          parameter-overrides: "awsNumber=${{ secrets.MY_SECRET_VALUE }}"
