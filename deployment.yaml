@@ -1,21 +1,16 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: "AWS with dynamoDB"
-Metadata: 
 
 Parameters: 
   awsNumber:
     Description: AWS number
     Type: String
 
-Mappings: 
-
-Conditions: 
-
 Resources: 
   booksRepository: 
     Type: AWS::ECR::Repository
     Properties: 
-      RepositoryName: "tbooks-repository"
+      RepositoryName: "books-repository"
       RepositoryPolicyText: 
         Version: "2012-10-17"
         Statement: 
@@ -24,7 +19,7 @@ Resources:
             Effect: Allow
             Principal: 
               AWS: 
-                - !sub "arn:aws:iam::${awsNumber}:user/dev-limited" #TODO change who is allowed here, Should be your git task that will push and pull
+                - !Sub "arn:aws:iam::${awsNumber}:user/dev-limited" #TODO change who is allowed here, Should be your git task that will push and pull
             Action: 
               - "ecr:GetDownloadUrlForLayer"
               - "ecr:BatchGetImage"
@@ -33,5 +28,3 @@ Resources:
               - "ecr:InitiateLayerUpload"
               - "ecr:UploadLayerPart"
               - "ecr:CompleteLayerUpload"
-
-Outputs:
