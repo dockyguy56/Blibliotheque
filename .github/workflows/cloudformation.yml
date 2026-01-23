@@ -134,4 +134,4 @@ jobs:
         with:
           name: booksStacks
           template: artifact/deployment.yaml
-          parameter-overrides: "awsNumber=${{ secrets.MY_SECRET_VALUE }}"
+          parameter-overrides: "awsNumber=${{ secrets.awsNumber }}"
