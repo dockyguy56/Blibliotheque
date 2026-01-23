@@ -19,7 +19,7 @@ Resources:
             Effect: Allow
             Principal: 
               AWS: 
-                - !Sub "arn:aws:iam::${awsNumber}:user/dev-limited" #TODO change who is allowed here, Should be your git task that will push and pull
+                - !Sub "arn:aws:iam::${awsNumber}:user/dev-limited" 
             Action: 
               - "ecr:GetDownloadUrlForLayer"
               - "ecr:BatchGetImage"
@@ -28,4 +28,3 @@ Resources:
               - "ecr:InitiateLayerUpload"
               - "ecr:UploadLayerPart"
               - "ecr:CompleteLayerUpload"
-              - "ecr:CreateRepository"
