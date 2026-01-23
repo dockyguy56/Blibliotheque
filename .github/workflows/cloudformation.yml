@@ -86,20 +86,6 @@ jobs:
     - name: copy cloudformation Template
       run: cp ../Blibliotheque/deployment.yaml ./artifact/deployment.yaml
 
-    # AWS buil and Push docker in ECR
-    # - name: Login to Amazon ECR
-    #  id: login-ecr
-    #   uses: aws-actions/amazon-ecr-login@v2
-
-    #- name: Build, tag, and push docker image to Amazon ECR
-    #  env:
-    #    REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-    #    REPOSITORY: booksRepository
-    #    IMAGE_TAG: ${{ github.sha }}
-    #  run: |
-    #    docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-    #    docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-
     # Upload Artifiact
     - uses: actions/upload-artifact@v4
       with:
@@ -135,3 +121,17 @@ jobs:
           name: booksStacks
           template: artifact/deployment.yaml
           parameter-overrides: "awsNumber=${{ secrets.awsNumber }}"
+      
+      # AWS buil and Push docker in ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: booksRepository
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
