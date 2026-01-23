@@ -121,7 +121,7 @@ jobs:
           name: booksStacks
           template: artifact/deployment.yaml
           parameter-overrides: "awsNumber=${{ secrets.awsNumber }}"
-          no-fail-on-empty-change-set: "1"
+          no-fail-on-empty-changeset: "1"
       
       # AWS buil and Push docker in ECR
       - name: Login to Amazon ECR
