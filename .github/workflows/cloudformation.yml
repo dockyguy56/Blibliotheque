@@ -99,7 +99,7 @@ jobs:
     
         
   deploy-ecr:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     env:
       Solution_Name: Blibliotheque.sln 
     needs: build
