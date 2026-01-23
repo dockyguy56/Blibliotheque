@@ -101,7 +101,8 @@ jobs:
     #    docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
     # Upload Artifiact
-    - uses: actions/upload-artifact@v4
+    - if: runner.debug == '1'
+      uses: actions/upload-artifact@v4
       with:
         name: books
         path: ./artifact
