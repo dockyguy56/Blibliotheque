@@ -86,6 +86,10 @@ jobs:
     - name: copy cloudformation Template
       run: cp ../Blibliotheque/deployment.yaml ./artifact/deployment.yaml
 
+    # Copy Docker Template
+    - name: copy Docker Template
+      run: cp ../Blibliotheque/Blibliotheque/Dockerfile ./artifact/Dockerfile
+
     # Upload Artifiact
     - uses: actions/upload-artifact@v4
       with:
@@ -100,6 +104,10 @@ jobs:
       Solution_Name: Blibliotheque.sln 
     needs: build
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       # Download artifact
       - uses: actions/download-artifact@v5
         with:
@@ -134,5 +142,5 @@ jobs:
           REPOSITORY: books-repository
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t ${{env.REGISTRY}}/${{env.REPOSITORY}}:${{env.IMAGE_TAG}} .
+          docker build -t ${{env.REGISTRY}}/${{env.REPOSITORY}}:${{env.IMAGE_TAG}} ../Blibliotheque/Blibliotheque
           docker push ${{env.REGISTRY}}/${{env.REPOSITORY}}:${{env.IMAGE_TAG}}
