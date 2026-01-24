@@ -1,12 +1,31 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: "Deploying only ec2"
+Parameters:
+  DockerImage:
+    Type: String
+    Description: Docker Image
 
 Resources: 
   BooksKeyPair:
     Type: 'AWS::EC2::KeyPair'
     Properties: 
       KeyFormat: pem
-      KeyName: MyKeyPair 
+      KeyName: MyKeyPair
+
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to client host
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0 
 
   BooksEc2:
      Type: 'AWS::EC2::Instance'
@@ -14,9 +33,19 @@ Resources:
         ImageId: ami-0b6c6ebed2801a5cb
         InstanceType: t3.micro
         KeyName: !Ref BooksKeyPair
+        SecurityGroupIds:
+        - Ref: InstanceSecurityGroup
         UserData:
           Fn::Base64: !Sub |
              #!/bin/bash
              yum update -y
+             sudo yum install -y dotnet-sdk-8.0
+             sudo yum install -y docker
+             sudo systemctl start docker
+             sudo systemctl enable docker
+
+             echo "Verifying installations..."
+             dotnet --version
+             docker --version
              service httpd start
              chkconfig httpd on
