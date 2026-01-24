@@ -89,6 +89,10 @@ jobs:
     # Copy Docker Template
     - name: copy Docker Template
       run: cp ../Blibliotheque/Dockerfile ./artifact/Dockerfile
+    
+    # Copy Docker Template
+    - name: copy Docker Template
+      run: cp ../Blibliotheque/awsec2.yaml ./artifact/awsec2.yaml
 
     # Upload Artifiact
     - uses: actions/upload-artifact@v4
@@ -104,10 +108,12 @@ jobs:
       Solution_Name: Blibliotheque.sln 
     needs: build
     steps:
+      # Checkout code
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       # Download artifact
       - uses: actions/download-artifact@v5
         with:
@@ -144,3 +150,29 @@ jobs:
         run: |
           docker build -t ${{env.REGISTRY}}/${{env.REPOSITORY}}:${{env.IMAGE_TAG}} .
           docker push ${{env.REGISTRY}}/${{env.REPOSITORY}}:${{env.IMAGE_TAG}}
+  
+  deploy-ec2:
+    runs-on: ubuntu-latest
+    needs: deploy-ecr
+    steps:
+      # Download Artifact
+      - uses: actions/download-artifact@v5
+        with:
+          name: books
+          path: artifact
+      
+      # AWS cred
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # AWS deploy cloud formation for ec2
+      - name: Deploy to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: ec2Stacks
+          template: artifact/awsec2.yaml
+          no-fail-on-empty-changeset: "1"

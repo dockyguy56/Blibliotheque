@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Deploying only ec2"
+
+Resources: 
+  myInstance:
+     Type: 'AWS::EC2::Instance'
+     Properties: 
+        ImageId: ami-0b6c6ebed2801a5cb
+        InstanceType: t3.micro
+        KeyName: my-key-pair
+        UserData:
+          Fn::Base64: !Sub |
+             #!/bin/bash
+             yum update -y
+             service httpd start
+             chkconfig httpd on
