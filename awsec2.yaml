@@ -5,7 +5,9 @@ Resources:
   BooksKeyPair:
     Type: 'AWS::EC2::KeyPair'
     Properties: 
-      KeyName: BooksKeyPair  
+      KeyFormat: pem
+      KeyName: MyKeyPair 
+
   BooksEc2:
      Type: 'AWS::EC2::Instance'
      Properties: 
