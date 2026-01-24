@@ -170,7 +170,7 @@ jobs:
           aws-region: us-east-1
 
       # AWS deploy cloud formation for ec2
-      - name: Deploy to AWS CloudFormation
+      - name: Deploy to AWS ec2
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: ec2Stacks
