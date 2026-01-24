@@ -175,4 +175,5 @@ jobs:
         with:
           name: ec2Stacks
           template: artifact/awsec2.yaml
+          parameter-overrides: "DockerImage=${{ secrets.DOCKER_IMAGE }}"
           no-fail-on-empty-changeset: "1"
