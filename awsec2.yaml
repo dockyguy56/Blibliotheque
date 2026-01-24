@@ -21,7 +21,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       CidrBlock: 10.0.1.0/24
-      VpcId: !Ref MyVPC
+      VpcId: !Ref myVPC
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
@@ -37,13 +37,13 @@ Resources:
   AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
-      VpcId: !Ref MyVPC
+      VpcId: !Ref myVPC
       InternetGatewayId: !Ref InternetGateway
   
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !Ref MyVPC
+      VpcId: !Ref myVPC
       Tags:
         - Key: Name
           Value: PublicRouteTable
