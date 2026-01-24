@@ -150,6 +150,7 @@ jobs:
         run: |
           docker build -t ${{env.REGISTRY}}/${{env.REPOSITORY}}:${{env.IMAGE_TAG}} .
           docker push ${{env.REGISTRY}}/${{env.REPOSITORY}}:${{env.IMAGE_TAG}}
+          docker push ${{env.REGISTRY}}/${{env.REPOSITORY}}:latest
   
   deploy-ec2:
     runs-on: ubuntu-latest
