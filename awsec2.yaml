@@ -91,8 +91,12 @@ Resources:
         ImageId: ami-0b6c6ebed2801a5cb
         InstanceType: t3.micro
         KeyName: !Ref BooksKeyPair
-        SecurityGroupIds:
-        - Ref: InstanceSecurityGroup
+        NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          SubnetId: !Ref PublicSubnet
+          DeviceIndex: 0
+          GroupSet:
+            - !Ref InstanceSecurityGroup
         UserData:
           Fn::Base64: !Sub |
              #!/bin/bash
