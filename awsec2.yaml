@@ -38,6 +38,7 @@ Resources:
         UserData:
           Fn::Base64: !Sub |
              #!/bin/bash
+             set -e # Exit immediately if a command exits with a non-zero status
              yum update -y
              sudo yum install -y dotnet-sdk-8.0
              sudo yum install -y docker
@@ -47,5 +48,7 @@ Resources:
              echo "Verifying installations..."
              dotnet --version
              docker --version
+
+             docker pull ${DockerImage}
              service httpd start
              chkconfig httpd on
