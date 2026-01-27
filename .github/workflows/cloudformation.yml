@@ -194,7 +194,7 @@ jobs:
         uses: chris5451/aws-ecr-run-image@main
         with:
           access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret_access_key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
+          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           account_id: ${{ secrets.awsNumber }}
           repo: ${{env.REPOSITORY}}
           region: ${{ secrets.AWS_REGION }}
