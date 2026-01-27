@@ -129,7 +129,7 @@ Resources:
              #!/bin/bash
              set -e # Exit immediately if a command exits with a non-zero status
              sudo apt-get update
-             sudo apt-get install -y dotnet-sdk-9.0
+             sudo apt-get install -y dotnet-sdk-10.0
              sudo apt-get install -y docker.io
              sudo systemctl start docker
              sudo systemctl enable docker
