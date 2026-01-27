@@ -84,12 +84,39 @@ Resources:
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0 
+  
+  # Role for the EC2 hosts. 
+  EC2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+      # See reference: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/security-iam-awsmanpol.html#security-iam-awsmanpol-AmazonEC2ContainerServiceforEC2Role
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role
+      # This managed policy allows us to connect to the instance using SSM
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles: 
+      - !Ref EC2Role 
 
   BooksEc2:
      Type: 'AWS::EC2::Instance'
      Properties: 
         ImageId: ami-0b6c6ebed2801a5cb
         InstanceType: t3.micro
+        IamInstanceProfile: !Ref EC2InstanceProfile
         KeyName: !Ref BooksKeyPair
         NetworkInterfaces:
         - AssociatePublicIpAddress: true
@@ -101,9 +128,9 @@ Resources:
           Fn::Base64: !Sub |
              #!/bin/bash
              set -e # Exit immediately if a command exits with a non-zero status
-             yum update -y
-             sudo yum install -y dotnet-sdk-8.0
-             sudo yum install -y docker
+             sudo apt-get update
+             sudo apt-get install -y dotnet-sdk-9.0
+             sudo apt-get install -y docker.io
              sudo systemctl start docker
              sudo systemctl enable docker
 
@@ -114,3 +141,5 @@ Resources:
              docker pull ${DockerImage}
              service httpd start
              chkconfig httpd on
+
+             
