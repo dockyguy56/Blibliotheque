@@ -426,9 +426,6 @@ Resources:
         - ContainerName: !Ref ServiceName
           ContainerPort: !Ref ContainerPort
           TargetGroupArn: !Ref myALBTargetGroup
-      DeploymentConfiguration:
-        MaximumPercent: 200
-        MinimumHealthyPercent: 50
       EnableExecuteCommand: true  # For debugging
       Tags:
         - Key: Name
