@@ -90,9 +90,13 @@ jobs:
     - name: copy Docker Template
       run: cp ../Blibliotheque/Dockerfile ./artifact/Dockerfile
     
-    # Copy Docker Template
+    # Copy ec2 Template
     - name: copy Docker Template
       run: cp ../Blibliotheque/awsec2.yaml ./artifact/awsec2.yaml
+
+    # Copy ecs Template
+    - name: copy Docker Template
+      run: cp ../Blibliotheque/awsecs.yaml ./artifact/awsecs.yaml
 
     # Upload Artifiact
     - uses: actions/upload-artifact@v4
@@ -152,8 +156,8 @@ jobs:
           docker push ${{env.REGISTRY}}/${{env.REPOSITORY}}:${{env.IMAGE_TAG}}
           docker build -t ${{env.REGISTRY}}/${{env.REPOSITORY}}:latest .
           docker push ${{env.REGISTRY}}/${{env.REPOSITORY}}:latest
-  
-  deploy-ec2:
+          
+  deploy-ecs:
     runs-on: ubuntu-latest
     needs: deploy-ecr
     steps:
@@ -162,7 +166,7 @@ jobs:
         with:
           name: books
           path: artifact
-      
+
       # AWS cred
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v5.1.1
@@ -171,33 +175,67 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      # AWS deploy cloud formation for ec2
-      - name: Deploy to AWS ec2
-        uses: aws-actions/aws-cloudformation-github-deploy@v1
-        with:
-          name: ec2Stacks
-          template: artifact/awsec2.yaml
-          parameter-overrides: "DockerImage=${{ secrets.DOCKER_IMAGE }}"
-          no-fail-on-empty-changeset: "1"
-
-      # AWS ECR
+      # AWS log-in ECR
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-        
-      # Pull image and run
-      - name: Pull image and run
+
+      # AWS deploy cloud formation for ecs
+      - name: Deploy to AWS ecs
         env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: books-repository
-          IMAGE_TAG: ${{ github.sha }}
-        uses: chris5451/aws-ecr-run-image@main
+            REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+            REPOSITORY: books-repository
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
-          access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          account_id: ${{ secrets.awsNumber }}
-          repo: ${{env.REPOSITORY}}
-          region: ${{ secrets.AWS_REGION }}
-          tag: latest
-          name: books
-          port: 5254
+          name: ecsStacks
+          template: artifact/awsecs.yaml
+          parameter-overrides: "ContainerImage=${{env.REGISTRY}}/${{env.REPOSITORY}}:latest"
+          no-fail-on-empty-changeset: "1"
+  # deploy-ec2:
+  #   runs-on: ubuntu-latest
+  #   needs: deploy-ecr
+  #   steps:
+  #     # Download Artifact
+  #     - uses: actions/download-artifact@v5
+  #       with:
+  #         name: books
+  #         path: artifact
+      
+  #     # AWS cred
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v5.1.1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
+
+  #     # AWS deploy cloud formation for ec2
+  #     - name: Deploy to AWS ec2
+  #       uses: aws-actions/aws-cloudformation-github-deploy@v1
+  #       with:
+  #         name: ec2Stacks
+  #         template: artifact/awsec2.yaml
+  #         parameter-overrides: "DockerImage=${{ secrets.DOCKER_IMAGE }}"
+  #         no-fail-on-empty-changeset: "1"
+
+  #     # AWS ECR
+  #     - name: Login to Amazon ECR
+  #       id: login-ecr
+  #       uses: aws-actions/amazon-ecr-login@v2
+        
+  #     # Pull image and run
+  #     - name: Pull image and run
+  #       env:
+  #         REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  #         REPOSITORY: books-repository
+  #         IMAGE_TAG: ${{ github.sha }}
+  #       uses: chris5451/aws-ecr-run-image@main
+  #       with:
+  #         access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         account_id: ${{ secrets.awsNumber }}
+  #         repo: ${{env.REPOSITORY}}
+  #         region: ${{ secrets.AWS_REGION }}
+  #         tag: latest
+  #         name: books
+  #         port: 5254
