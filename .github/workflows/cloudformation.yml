@@ -199,5 +199,5 @@ jobs:
           repo: ${{env.REPOSITORY}}
           region: ${{ secrets.AWS_REGION }}
           tag: latest
-          name: ${{env.REGISTRY}}/${{env.REPOSITORY}}
+          name: books
           port: 5254
