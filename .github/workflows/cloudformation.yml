@@ -179,3 +179,25 @@ jobs:
           template: artifact/awsec2.yaml
           parameter-overrides: "DockerImage=${{ secrets.DOCKER_IMAGE }}"
           no-fail-on-empty-changeset: "1"
+
+      # AWS ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+        
+      # Pull image and run
+      - name: Pull image and run
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: books-repository
+          IMAGE_TAG: ${{ github.sha }}
+        uses: chris5451/aws-ecr-run-image@main
+        with:
+          access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          account_id: ${{ secrets.awsNumber }}
+          repo: ${{env.REPOSITORY}}
+          region: ${{ secrets.AWS_REGION }}
+          tag: latest
+          name: books
+          port: 5254
