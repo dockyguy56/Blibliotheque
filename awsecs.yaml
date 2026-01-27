@@ -266,7 +266,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: !Ref ContainerPort
           ToPort: !Ref ContainerPort
-          SourceSecurityGroupId: !Ref ALBSecurityGroup
+          SourceSecurityGroupId: !Ref myALBSecurityGroup
           Description: Allow traffic from ALB
       SecurityGroupEgress:
         - IpProtocol: -1
