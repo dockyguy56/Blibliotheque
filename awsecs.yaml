@@ -354,6 +354,7 @@ Resources:
             Action: sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
       Tags:
         - Key: Name
           Value: !Sub '${AWS::StackName}-task-execution-role'
@@ -369,6 +370,8 @@ Resources:
             Principal:
               Service: ecs-tasks.amazonaws.com
             Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
       Tags:
         - Key: Name
           Value: !Sub '${AWS::StackName}-task-role'
