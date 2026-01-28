@@ -300,6 +300,12 @@ Resources:
       Protocol: HTTP
       VpcId: !Ref myVPC
       TargetType: ip
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 5
       Tags:
         - Key: Name
           Value: !Sub '${AWS::StackName}-tg'
@@ -368,11 +374,11 @@ Resources:
           Value: !Sub '${AWS::StackName}-task-role'
 
   # CloudWatch Log Group
-  # myLogGroup:
-  #   Type: AWS::Logs::LogGroup
-  #   Properties:
-  #     LogGroupName: !Sub '/ecs/${AWS::StackName}'
-  #     RetentionInDays: 2
+  myLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/ecs/${AWS::StackName}'
+      RetentionInDays: 2
   
   # ECS Task Definition
   myTaskDefinition:
@@ -393,12 +399,20 @@ Resources:
             - ContainerPort: !Ref ContainerPort
               Protocol: tcp
           Essential: true
-          # LogConfiguration:
-          #   LogDriver: awslogs
-          #   Options:
-          #     awslogs-group: !Ref myLogGroup
-          #     awslogs-region: !Ref AWS::Region
-          #     awslogs-stream-prefix: ecs
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref myLogGroup
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs 
+          HealthCheck:
+            Command:
+              - CMD-SHELL
+              - curl -f http://localhost/ || exit 1
+            Interval: 30
+            Timeout: 5
+            Retries: 3
+            StartPeriod: 60
       Tags:
         - Key: Name
           Value: !Sub '${AWS::StackName}-task'
