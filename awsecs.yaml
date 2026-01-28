@@ -44,7 +44,7 @@ Parameters:
   
   DesiredCount:
     Type: Number
-    Default: 0
+    Default: 1
     Description: Desired number of tasks
   
   MinCapacity:
