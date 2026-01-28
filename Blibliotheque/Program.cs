@@ -13,6 +13,8 @@ builder.Services.AddScoped<IDynamoDBContext, DynamoDBContext>();
 builder.Services.AddOpenApi();
 builder.Services.AddOpenApiDocument();
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -22,6 +24,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapHealthChecks("health");
 
 app.UseAuthorization();
 

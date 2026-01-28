@@ -4,6 +4,10 @@ GET {{rootURL}}/weatherforecast/
 Accept: application/json
 
 ###
+GET {{rootURL}}/swagger/
+Accept: application/json
+
+###
 GET {{rootURL}}/api/books
 Accept: application/json
 
