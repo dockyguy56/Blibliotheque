@@ -374,11 +374,11 @@ Resources:
           Value: !Sub '${AWS::StackName}-task-role'
 
   # CloudWatch Log Group
-  myLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Sub '/ecs/${AWS::StackName}'
-      RetentionInDays: 2
+  # myLogGroup:
+  #   Type: AWS::Logs::LogGroup
+  #   Properties:
+  #     LogGroupName: !Sub '/ecs/${AWS::StackName}'
+  #     RetentionInDays: 2
   
   # ECS Task Definition
   myTaskDefinition:
@@ -399,12 +399,12 @@ Resources:
             - ContainerPort: !Ref ContainerPort
               Protocol: tcp
           Essential: true
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              awslogs-group: !Ref myLogGroup
-              awslogs-region: !Ref AWS::Region
-              awslogs-stream-prefix: ecs 
+          # LogConfiguration:
+          #   LogDriver: awslogs
+          #   Options:
+          #     awslogs-group: !Ref myLogGroup
+          #     awslogs-region: !Ref AWS::Region
+          #     awslogs-stream-prefix: ecs 
           HealthCheck:
             Command:
               - CMD-SHELL
