@@ -411,11 +411,11 @@ Resources:
           HealthCheck:
             Command:
               - CMD-SHELL
-              - curl -f http://localhost:8080/health || exit 1
+              - curl -v -f http://localhost:8080/health || exit 1
             Interval: 30
             Timeout: 5
             Retries: 3
-            StartPeriod: 60
+            StartPeriod: 120
       Tags:
         - Key: Name
           Value: !Sub '${AWS::StackName}-task'
